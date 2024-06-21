@@ -8,5 +8,5 @@ enum class NetworkError : ErrorDefault {
     FORBIDDEN,              //403
     NOT_FOUND,              //404
     INTERNAL_SERVER_ERROR,  //500
-    UNKNOWN_ERROR;
+    UNKNOWN_ERROR
 }

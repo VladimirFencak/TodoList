@@ -79,4 +79,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     kapt(libs.room.compiler)
+
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 }
