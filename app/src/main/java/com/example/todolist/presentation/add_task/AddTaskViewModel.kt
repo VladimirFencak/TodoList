@@ -16,7 +16,7 @@ class AddTaskViewModel(
 
     fun onEvent(event: AddTaskEvent) {
         when (event) {
-            is AddTaskEvent.onTitleChange -> {
+            is AddTaskEvent.OnTitleChange -> {
                 _state.value = _state.value.copy(title = event.title)
                 if (event.title.isNotBlank()) {
                     _state.value = _state.value.copy(isValidTask = true)
@@ -25,11 +25,11 @@ class AddTaskViewModel(
                 }
             }
 
-            is AddTaskEvent.onDescriptionChange -> {
+            is AddTaskEvent.OnDescriptionChange -> {
                 _state.value = _state.value.copy(description = event.description)
             }
 
-            AddTaskEvent.onAddTaskTask -> {
+            AddTaskEvent.OnAddTaskTask -> {
                 viewModelScope.launch {
                     taskRepository.createTask(
                         Task(
@@ -43,7 +43,7 @@ class AddTaskViewModel(
                 }
             }
 
-            AddTaskEvent.onBack -> TODO()
+            AddTaskEvent.OnBack -> TODO()
         }
     }
 }

@@ -40,7 +40,7 @@ fun AddTaskScreen() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
-                    onClick = { viewModel.onEvent(AddTaskEvent.onBack) },
+                    onClick = { viewModel.onEvent(AddTaskEvent.OnBack) },
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("Cancel")
@@ -49,7 +49,7 @@ fun AddTaskScreen() {
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Button(
-                    onClick = { viewModel.onEvent(AddTaskEvent.onAddTaskTask) },
+                    onClick = { viewModel.onEvent(AddTaskEvent.OnAddTaskTask) },
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("Add Task")
@@ -65,7 +65,7 @@ fun AddTaskScreen() {
                     focusedIndicatorColor = MaterialTheme.colorScheme.surface,
                 ),
                 value = state.title,
-                onValueChange = { viewModel.onEvent(AddTaskEvent.onTitleChange(it)) },
+                onValueChange = { viewModel.onEvent(AddTaskEvent.OnTitleChange(it)) },
                 placeholder = { Text("Title") },
             )
 
@@ -82,7 +82,7 @@ fun AddTaskScreen() {
                     focusedIndicatorColor = MaterialTheme.colorScheme.surface,
                 ),
                 value = state.description,
-                onValueChange = { viewModel.onEvent(AddTaskEvent.onDescriptionChange(it)) },
+                onValueChange = { viewModel.onEvent(AddTaskEvent.OnDescriptionChange(it)) },
                 placeholder = { Text("Description") },
             )
 

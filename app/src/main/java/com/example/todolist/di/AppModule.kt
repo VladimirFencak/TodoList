@@ -9,6 +9,7 @@ import com.example.todolist.data.repository.TaskRepositoryImpl
 import com.example.todolist.domain.repository.TaskRepository
 import com.example.todolist.presentation.add_task.AddTaskViewModel
 import com.example.todolist.presentation.agenda.AgendaViewModel
+import com.example.todolist.presentation.detail.DetailViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -68,5 +69,9 @@ val appModule = module {
 
     viewModel {
         AddTaskViewModel(get())
+    }
+
+    viewModel {
+        DetailViewModel(get())
     }
 }
