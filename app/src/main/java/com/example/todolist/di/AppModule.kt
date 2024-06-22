@@ -7,6 +7,8 @@ import com.example.todolist.data.remote.TaskApi
 import com.example.todolist.data.remote.TaskApiImpl
 import com.example.todolist.data.repository.TaskRepositoryImpl
 import com.example.todolist.domain.repository.TaskRepository
+import com.example.todolist.presentation.add_task.AddTaskViewModel
+import com.example.todolist.presentation.agenda.AgendaViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -15,6 +17,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -57,5 +60,13 @@ val appModule = module {
 
     single<TaskRepository> {
         TaskRepositoryImpl(get(), get())
+    }
+
+    viewModel {
+        AgendaViewModel(get())
+    }
+
+    viewModel {
+        AddTaskViewModel(get())
     }
 }
