@@ -18,18 +18,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.todolist.presentation.components.RoundedTopBar
 import com.example.todolist.presentation.components.TaskItem
+import com.example.todolist.ui.navigation.NavAddTaskScreen
+import com.example.todolist.ui.navigation.NavDetailScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AgendaScreen() {
+fun AgendaScreen(
+    navController: NavController
+) {
     val viewModel = koinViewModel<AgendaViewModel>()
     val state = viewModel.state.value
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        floatingActionButton = { FloatingButton(viewModel = viewModel) }
+        floatingActionButton = { FloatingButton(viewModel = viewModel, navController) }
     ) { scaffoldPadding ->
         Box(
             modifier = Modifier
@@ -60,7 +65,9 @@ fun AgendaScreen() {
                         items(state.tasks) { task ->
                             TaskItem(
                                 task = task,
-                                onTaskClick = { viewModel.onEvent(AgendaEvent.OnTaskDelete(task)) },
+                                onTaskClick = {
+                                    navController.navigate(NavDetailScreen(task.id))
+                                },
                                 onCheckboxClick = { viewModel.onEvent(AgendaEvent.OnTaskCompletionChange(task)) }
                             )
                         }
@@ -72,9 +79,9 @@ fun AgendaScreen() {
 }
 
 @Composable
-fun FloatingButton(viewModel: AgendaViewModel) {
+fun FloatingButton(viewModel: AgendaViewModel, navController: NavController) {
     FloatingActionButton(
-        onClick = { viewModel.onEvent(AgendaEvent.OnAddTask) },
+        onClick = { navController.navigate(NavAddTaskScreen) },
         containerColor = MaterialTheme.colorScheme.secondaryContainer,
         contentColor = MaterialTheme.colorScheme.secondary
     ) {
