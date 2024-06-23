@@ -1,5 +1,6 @@
 package com.example.todolist.presentation.detail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -81,7 +83,10 @@ fun DetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 16.dp)
-                            .padding(bottom = 8.dp),
+                            .padding(bottom = 8.dp)
+                            .clickable(onClick = {
+                                viewModel.onEvent(DetailEvent.OnTaskCompletionChange)
+                            }),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
@@ -118,8 +123,7 @@ fun DetailScreen(
                             .height(80.dp)
                             .align(Alignment.CenterHorizontally),
                         onClick = {
-                            viewModel.onEvent(DetailEvent.DeleteTask)
-                            navController.popBackStack()
+                            viewModel.onEvent(DetailEvent.ShowDeleteDialog)
                         },
                     ) {
                         Row(
@@ -134,7 +138,28 @@ fun DetailScreen(
                         }
                     }
                 }
+            }
 
+            if (state.showDeleteDialog) {
+                AlertDialog(
+                    onDismissRequest = { viewModel.onEvent(DetailEvent.HideDeleteDialog) },
+                    dismissButton = {
+                        TextButton(onClick = { viewModel.onEvent(DetailEvent.HideDeleteDialog) }) {
+                            Text("Cancel")
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            viewModel.onEvent(DetailEvent.DeleteTask)
+                            navController.popBackStack()
+                        }) {
+                            Text(text = "Delete")
+                        }
+                    },
+                    title = {
+                        Text("Delete Task")
+                    },
+                )
             }
         }
     }

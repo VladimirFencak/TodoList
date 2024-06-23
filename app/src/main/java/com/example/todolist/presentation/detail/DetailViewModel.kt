@@ -56,6 +56,14 @@ class DetailViewModel(
                     state.value.task?.let { taskRepository.updateTask(it.copy(isCompleted = !it.isCompleted)) }
                 }
             }
+
+            DetailEvent.HideDeleteDialog -> {
+                _state.value = _state.value.copy(showDeleteDialog = false)
+            }
+
+            DetailEvent.ShowDeleteDialog -> {
+                _state.value = _state.value.copy(showDeleteDialog = true)
+            }
         }
     }
 

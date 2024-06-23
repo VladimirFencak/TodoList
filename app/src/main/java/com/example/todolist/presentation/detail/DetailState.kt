@@ -7,5 +7,6 @@ data class DetailState(
     val task: Task? = null,
     val formattedDate: String = "",
     val isLoading: Boolean = false,
-    val error: ErrorDefault? = null
+    val error: ErrorDefault? = null,
+    val showDeleteDialog: Boolean = false
 )
