@@ -20,10 +20,6 @@ class AgendaViewModel(
 
     fun onEvent(event: AgendaEvent) {
         when (event) {
-            AgendaEvent.OnAddTask -> {
-                //open add task
-            }
-
             is AgendaEvent.OnTaskDelete -> {
                 viewModelScope.launch {
                     taskRepository.deleteTask(event.task)

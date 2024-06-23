@@ -30,8 +30,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.todolist.R
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -50,13 +52,13 @@ fun DetailScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Agenda")
+                    Text(stringResource(id = R.string.agenda))
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(id = R.string.back),
                         )
                     }
                 }
@@ -112,7 +114,7 @@ fun DetailScreen(
                     HorizontalDivider()
                     Text(
                         modifier = Modifier.padding(vertical = 8.dp),
-                        text = "Created at : ${state.formattedDate}"
+                        text = stringResource(id = R.string.created_at) + state.formattedDate
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -131,10 +133,10 @@ fun DetailScreen(
                         ) {
                             Icon(
                                 Icons.Default.Delete,
-                                contentDescription = "Delete Task"
+                                contentDescription = stringResource(id = R.string.delete_task_button)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "DELETE TASK")
+                            Text(text = stringResource(id = R.string.delete_task_button))
                         }
                     }
                 }
@@ -145,7 +147,7 @@ fun DetailScreen(
                     onDismissRequest = { viewModel.onEvent(DetailEvent.HideDeleteDialog) },
                     dismissButton = {
                         TextButton(onClick = { viewModel.onEvent(DetailEvent.HideDeleteDialog) }) {
-                            Text("Cancel")
+                            Text(stringResource(id = R.string.cancel))
                         }
                     },
                     confirmButton = {
@@ -153,11 +155,11 @@ fun DetailScreen(
                             viewModel.onEvent(DetailEvent.DeleteTask)
                             navController.popBackStack()
                         }) {
-                            Text(text = "Delete")
+                            Text(text = stringResource(id = R.string.delete))
                         }
                     },
                     title = {
-                        Text("Delete Task")
+                        Text(stringResource(id = R.string.delete_task_dialog))
                     },
                 )
             }

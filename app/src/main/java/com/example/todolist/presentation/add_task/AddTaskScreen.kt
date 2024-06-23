@@ -22,8 +22,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.todolist.R
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,13 +44,13 @@ fun AddTaskScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Add Task")
+                    Text(stringResource(id = R.string.add_task))
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Cancel",
+                            contentDescription = stringResource(id = R.string.cancel),
                         )
                     }
                 },
@@ -57,7 +59,7 @@ fun AddTaskScreen(
                         viewModel.onEvent(AddTaskEvent.OnAddTaskTask)
                     }) {
                         Text(
-                            text = "Save",
+                            text = stringResource(id = R.string.save),
                             style = MaterialTheme.typography.titleMedium,
                         )
                     }
@@ -86,7 +88,7 @@ fun AddTaskScreen(
                 onValueChange = { viewModel.onEvent(AddTaskEvent.OnTitleChange(it)) },
                 placeholder = {
                     Text(
-                        text = "Title",
+                        text = stringResource(id = R.string.title),
                         color = if (state.isMissingTitleError) {
                             MaterialTheme.colorScheme.error
                         } else {
@@ -96,7 +98,7 @@ fun AddTaskScreen(
                 },
                 trailingIcon = {
                     if (state.isMissingTitleError)
-                        Icon(Icons.Filled.Info, "error", tint = MaterialTheme.colorScheme.error)
+                        Icon(Icons.Filled.Info, stringResource(id = R.string.error), tint = MaterialTheme.colorScheme.error)
                 }
             )
 
@@ -116,7 +118,7 @@ fun AddTaskScreen(
                 onValueChange = { viewModel.onEvent(AddTaskEvent.OnDescriptionChange(it)) },
                 placeholder = {
                     Text(
-                        text = "Description",
+                        text = stringResource(id = R.string.description),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },

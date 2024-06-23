@@ -23,7 +23,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.example.todolist.R
 import com.example.todolist.presentation.components.TaskItem
 import com.example.todolist.ui.navigation.NavAddTaskScreen
 import com.example.todolist.ui.navigation.NavDetailScreen
@@ -45,13 +47,13 @@ fun AgendaScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text("Agenda")
+                    Text(stringResource(id = R.string.agenda))
                 },
                 actions = {
                     IconButton(onClick = { }) {
                         Icon(
                             Icons.Filled.AccountCircle,
-                            contentDescription = "Profile",
+                            contentDescription = stringResource(id = R.string.profile),
                         )
                     }
                 },
@@ -59,7 +61,7 @@ fun AgendaScreen(
                     IconButton(onClick = {}) {
                         Icon(
                             Icons.Filled.Menu,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(id = R.string.back),
                         )
                     }
                 },
@@ -72,7 +74,7 @@ fun AgendaScreen(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.secondary
             ) {
-                Icon(Icons.Filled.Add, "Add Task")
+                Icon(Icons.Filled.Add, stringResource(id = R.string.add_task))
             }
         }
     ) { scaffoldPadding ->

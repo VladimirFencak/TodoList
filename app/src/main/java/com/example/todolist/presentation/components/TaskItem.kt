@@ -25,12 +25,13 @@ import com.example.todolist.domain.model.Task
 
 @Composable
 fun TaskItem(
+    modifier: Modifier = Modifier,
     task: Task,
     onTaskClick: (Task) -> Unit,
     onCheckboxClick: (Task) -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp))
