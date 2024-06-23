@@ -7,7 +7,7 @@ import com.example.todolist.domain.model.Task
 import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
-    suspend fun getTaskById(taskId: Int): Result<Task, RoomError>
+    fun getTaskById(taskId: Int): Result<Flow<Task?>, RoomError>
     suspend fun createTask(task: Task): Result<Unit, RoomError>
     suspend fun updateTask(task: Task): Result<Unit, RoomError>
     suspend fun deleteTask(task: Task): Result<Unit, RoomError>

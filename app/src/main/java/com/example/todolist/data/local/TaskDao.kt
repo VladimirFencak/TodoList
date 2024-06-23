@@ -20,8 +20,8 @@ interface TaskDao {
     suspend fun delete(taskEntity: TaskEntity): Int
 
     @Query("SELECT * FROM TaskEntity WHERE id = :taskId")
-    suspend fun getTaskById(taskId: Int): TaskEntity?
+    fun getTaskById(taskId: Int): Flow<TaskEntity?>
 
-    @Query("SELECT * FROM TaskEntity ORDER BY createdAt ASC")
+    @Query("SELECT * FROM TaskEntity ORDER BY createdAt DESC")
     fun getTasksOrderedByDateCreated(): Flow<List<TaskEntity>>
 }

@@ -9,7 +9,7 @@ data class TaskEntity(
     val title: String,
     val description: String?,
     val isCompleted: Boolean,
-    val createdAt: Int,
+    val createdAt: Long,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 )
@@ -19,7 +19,7 @@ fun TaskEntity.toTask() = Task(
     title = title,
     description = description ?: "",
     isCompleted = isCompleted,
-    createdAt = createdAt.toLong()
+    createdAt = createdAt
 )
 
 fun Task.toTaskEntity() = TaskEntity(
@@ -27,5 +27,5 @@ fun Task.toTaskEntity() = TaskEntity(
     title = title,
     description = description,
     isCompleted = isCompleted,
-    createdAt = createdAt.toInt()
+    createdAt = createdAt
 )

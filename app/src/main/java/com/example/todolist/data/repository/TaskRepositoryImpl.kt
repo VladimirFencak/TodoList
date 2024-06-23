@@ -18,14 +18,11 @@ class TaskRepositoryImpl(
     private val taskApi: TaskApi,
     private val taskDao: TaskDao
 ) : TaskRepository {
-    override suspend fun getTaskById(taskId: Int): Result<Task, RoomError> {
+    override fun getTaskById(taskId: Int): Result<Flow<Task?>, RoomError> {
         return try {
-            val task = taskDao.getTaskById(taskId)
-            if (task == null) {
-                Result.Error(RoomError.UNKNOWN_ERROR)
-            } else {
-                Result.Success(task.toTask())
-            }
+            Result.Success(taskDao.getTaskById(taskId).map { taskEntities ->
+                taskEntities?.toTask()
+            })
         } catch (e: Exception) {
             Result.Error(getRoomException(e))
         }

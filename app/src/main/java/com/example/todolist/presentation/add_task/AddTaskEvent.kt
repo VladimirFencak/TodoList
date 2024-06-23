@@ -4,5 +4,4 @@ sealed class AddTaskEvent {
     data class OnTitleChange(val title: String) : AddTaskEvent()
     data class OnDescriptionChange(val description: String) : AddTaskEvent()
     data object OnAddTaskTask : AddTaskEvent()
-    data object OnBack : AddTaskEvent()
 }

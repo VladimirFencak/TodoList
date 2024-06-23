@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                         AgendaScreen(navController)
                     }
                     composable<NavAddTaskScreen> {
-                        AddTaskScreen()
+                        AddTaskScreen(navController)
                     }
                     composable<NavDetailScreen> {
                         DetailScreen(

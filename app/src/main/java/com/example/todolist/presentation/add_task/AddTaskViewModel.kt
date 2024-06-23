@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todolist.domain.errors.Result
 import com.example.todolist.domain.model.Task
 import com.example.todolist.domain.repository.TaskRepository
 import kotlinx.coroutines.launch
@@ -18,11 +19,6 @@ class AddTaskViewModel(
         when (event) {
             is AddTaskEvent.OnTitleChange -> {
                 _state.value = _state.value.copy(title = event.title)
-                if (event.title.isNotBlank()) {
-                    _state.value = _state.value.copy(isValidTask = true)
-                } else {
-                    _state.value = _state.value.copy(isValidTask = false)
-                }
             }
 
             is AddTaskEvent.OnDescriptionChange -> {
@@ -30,20 +26,31 @@ class AddTaskViewModel(
             }
 
             AddTaskEvent.OnAddTaskTask -> {
-                viewModelScope.launch {
-                    taskRepository.createTask(
-                        Task(
-                            title = state.value.title,
-                            description = state.value.description,
-                            isCompleted = false,
-                            id = 0,
-                            createdAt = System.currentTimeMillis()
-                        )
-                    )
+                if (state.value.title.isBlank()) {
+                    _state.value = _state.value.copy(isMissingTitleError = true)
+                } else {
+                    _state.value = _state.value.copy(isMissingTitleError = false)
+                    viewModelScope.launch {
+                        when (taskRepository.createTask(
+                            Task(
+                                title = state.value.title,
+                                description = state.value.description,
+                                isCompleted = false,
+                                id = 0,
+                                createdAt = System.currentTimeMillis() / 1000
+                            )
+                        )) {
+                            is Result.Success -> {
+                                _state.value = _state.value.copy(savedSuccessfully = true)
+                            }
+
+                            is Result.Error -> {
+                                _state.value = _state.value.copy(savedSuccessfully = false)
+                            }
+                        }
+                    }
                 }
             }
-
-            AddTaskEvent.OnBack -> TODO()
         }
     }
 }

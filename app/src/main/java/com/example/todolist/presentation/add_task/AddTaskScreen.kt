@@ -2,59 +2,77 @@ package com.example.todolist.presentation.add_task
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen() {
+fun AddTaskScreen(
+    navController: NavController
+) {
     val viewModel = koinViewModel<AddTaskViewModel>()
     val state = viewModel.state.value
 
-    Scaffold { padding ->
+    LaunchedEffect(state.savedSuccessfully) {
+        if (state.savedSuccessfully) navController.popBackStack()
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Add Task")
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Cancel",
+                        )
+                    }
+                },
+                actions = {
+                    TextButton(onClick = {
+                        viewModel.onEvent(AddTaskEvent.OnAddTaskTask)
+                    }) {
+                        Text(
+                            text = "Save",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+                }
+            )
+        }
+    ) { scaffoldPadding ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .padding(top = padding.calculateTopPadding()),
+                .padding(horizontal = 16.dp)
+                .padding(scaffoldPadding),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = { viewModel.onEvent(AddTaskEvent.OnBack) },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Cancel")
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Button(
-                    onClick = { viewModel.onEvent(AddTaskEvent.OnAddTaskTask) },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Add Task")
-                }
-            }
 
             TextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -66,7 +84,20 @@ fun AddTaskScreen() {
                 ),
                 value = state.title,
                 onValueChange = { viewModel.onEvent(AddTaskEvent.OnTitleChange(it)) },
-                placeholder = { Text("Title") },
+                placeholder = {
+                    Text(
+                        text = "Title",
+                        color = if (state.isMissingTitleError) {
+                            MaterialTheme.colorScheme.error
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        }
+                    )
+                },
+                trailingIcon = {
+                    if (state.isMissingTitleError)
+                        Icon(Icons.Filled.Info, "error", tint = MaterialTheme.colorScheme.error)
+                }
             )
 
             HorizontalDivider()
@@ -83,9 +114,13 @@ fun AddTaskScreen() {
                 ),
                 value = state.description,
                 onValueChange = { viewModel.onEvent(AddTaskEvent.OnDescriptionChange(it)) },
-                placeholder = { Text("Description") },
+                placeholder = {
+                    Text(
+                        text = "Description",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                },
             )
-
         }
     }
 }

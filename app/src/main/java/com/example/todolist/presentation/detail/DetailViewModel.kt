@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.todolist.domain.errors.Result
 import com.example.todolist.domain.repository.TaskRepository
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class DetailViewModel(
     private val taskRepository: TaskRepository,
@@ -21,7 +24,15 @@ class DetailViewModel(
             taskRepository.getTaskById(taskId).also { result ->
                 when (result) {
                     is Result.Success -> {
-                        _state.value = _state.value.copy(isLoading = false, task = result.data)
+                        result.data.collect { task ->
+                            task?.let {
+                                _state.value = _state.value.copy(
+                                    isLoading = false,
+                                    task = task,
+                                    formattedDate = epochSecondsToReadableDate(task.createdAt)
+                                )
+                            }
+                        }
                     }
 
                     is Result.Error -> {
@@ -34,17 +45,24 @@ class DetailViewModel(
 
     fun onEvent(event: DetailEvent) {
         when (event) {
-            is DetailEvent.OnIsCompletedChange -> {
-                viewModelScope.launch {
-                    state.value.task?.let { taskRepository.updateTask(it.copy(isCompleted = event.isCompleted)) }
-                }
-            }
-
             DetailEvent.DeleteTask -> {
                 viewModelScope.launch {
                     state.value.task?.let { taskRepository.deleteTask(it) }
                 }
             }
+
+            DetailEvent.OnTaskCompletionChange -> {
+                viewModelScope.launch {
+                    state.value.task?.let { taskRepository.updateTask(it.copy(isCompleted = !it.isCompleted)) }
+                }
+            }
         }
+    }
+
+    private fun epochSecondsToReadableDate(epochMillis: Long): String {
+        val instant = Instant.ofEpochSecond(epochMillis)
+        val zonedDateTime = instant.atZone(ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+        return formatter.format(zonedDateTime)
     }
 }
